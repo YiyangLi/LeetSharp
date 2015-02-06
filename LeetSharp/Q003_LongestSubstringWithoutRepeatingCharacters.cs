@@ -33,7 +33,7 @@ namespace LeetSharp
                 }
                 lastIndex[letterIndex] = i;
             }
-            len = s.Length - 1 - start;
+            len = s.Length - start;
             if (len > maxLen)
                 maxLen = len;
             return maxLen;
