@@ -16,7 +16,27 @@ namespace LeetSharp
     {
         int LengthOfLongestSubstring(string s)
         {
-            return -1;
+            //Greedy Algorithm
+            var lastIndex = Enumerable.Range(0, 52).Select((_) => -1).ToArray();
+            int maxLen = 0;
+            int start = 0;
+            int len = 0;
+            for (int i = 0; i < s.Length; i++)
+            {
+                int letterIndex = s[i] >= 'a' && s[i] <= 'z' ? s[i] - 'a' + 26 : s[i] - 'A';
+                if (lastIndex[letterIndex] >= start)
+                {
+                    len = i - start;
+                    if (len > maxLen)
+                        maxLen = len;
+                    start = lastIndex[letterIndex] + 1;
+                }
+                lastIndex[letterIndex] = i;
+            }
+            len = s.Length - 1 - start;
+            if (len > maxLen)
+                maxLen = len;
+            return maxLen;
         }
 
         public string SolveQuestion(string input)
