@@ -24,7 +24,21 @@ namespace LeetSharp
     {
         public string Convert(string s, int nRows)
         {
-            return null;
+            if (nRows == 1)
+                return s;
+            var goldenStep = 2 * nRows - 2;
+            var result = new char[s.Length];
+            var k = 0;
+            for (int row = 0; row < nRows; row++)
+            {
+                for (int i = row; i < s.Length; i = i + goldenStep)
+                {
+                    result[k++] = s[i];
+                    if ((row != 0) && row != (nRows - 1) && nRows > 2 && (i + goldenStep - 2 * row) < s.Length)
+                        result[k++] = s[i + goldenStep - 2 * row];
+                }
+            }
+            return new string(result);
         }
 
         public string SolveQuestion(string input)
