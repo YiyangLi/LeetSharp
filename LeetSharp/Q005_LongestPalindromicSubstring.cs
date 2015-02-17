@@ -13,9 +13,36 @@ namespace LeetSharp
     [TestClass]
     public class Q005_LongestPalindromicSubstring
     {
+        string LocalLongest(string input, int left, int right)
+        {
+            while (left >= 0 && right < input.Length && input[left] == input[right])
+            {
+                left--;
+                right++;
+            }
+            return input.Substring(left + 1, right - left - 1);
+        }
         string LongestPalindrome(string input)
         {
-            return null;
+            if (input.Length == 1)
+                return input;
+            var result = string.Empty;
+            for (int i = 0; i < input.Length - 1; i++)
+            {
+                string p1 = LocalLongest(input, i, i);
+                if (p1.Length > result.Length)
+                    result = p1;
+                p1 = LocalLongest(input, i, i + 1);
+                if (p1.Length > result.Length)
+                    result = p1;
+            }
+            return result;
+        }
+
+        IEnumerable<char> hashSign()
+        {
+            while(true)
+                yield return '#';
         }
 
         public string SolveQuestion(string input)
