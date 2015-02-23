@@ -44,8 +44,8 @@ namespace LeetSharp
                     shortest.Add(s, 0);
             }
             //Dictionary<string, string> route = dict.ToDictionary(key => key, _ => string.Empty);
-            if (!ConvertToGraph(shortest.Keys.ToArray(), out graph))
-                return -1;
+            if (!ConvertToGraph(shortest.Keys.ToArray(), out graph) || graph[start].Count() == 0 || graph[end].Count() == 0)
+                return 0;
             Queue<string> q = new Queue<string>();
             q.Enqueue(start);
             //visited.Add(start);
@@ -100,11 +100,17 @@ namespace LeetSharp
                 for (int i = 0; i < dict.Length; i++)
                     for (int j = i + 1; j < dict.Length; j++)
                     {
-                        if (dict[i].Length == dict[j].Length &&
-                             Enumerable.Range(0, dict[i].Length).Where(idx => dict[i][idx] != dict[j][idx]).Count() == 1)
+                        if (dict[i].Length == dict[j].Length)
                         {
-                            graph[dict[i]].Add(dict[j]);
-                            graph[dict[j]].Add(dict[i]);
+                            var diffCount = 0;
+                            for (int k = 0; k < dict[i].Length; k++)
+                                if (dict[i][k] != dict[j][k])
+                                    diffCount++;
+                            if (diffCount == 1)
+                            {
+                                graph[dict[i]].Add(dict[j]);
+                                graph[dict[j]].Add(dict[i]);
+                            }
                         }
                     }
                 return true;
