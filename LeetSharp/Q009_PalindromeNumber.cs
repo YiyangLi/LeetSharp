@@ -14,7 +14,22 @@ namespace LeetSharp
     {
         public bool IsPalindrome(int x)
         {
-            return false;
+            if (x < 0)
+                return false;
+            int div = 1;
+            var isPalindrome = true;
+            while (x / div >= 10)
+                div *= 10;
+            while (isPalindrome && x >= 10)
+            {
+                var first = (int)(x / div);
+                var last = x % 10;
+                x = (x % div) / 10;
+                if (first != last)
+                    isPalindrome = false;
+                div = div / 100;
+            }
+            return isPalindrome;
         }
 
         public string SolveQuestion(string input)
