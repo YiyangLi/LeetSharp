@@ -40,23 +40,21 @@ namespace LeetSharp
         }
         public bool IsMatchHelper(int sPointer, int pPointer)
         {
-            if (sPointer >= S.Length)
-                return pPointer >= P.Length || P[pPointer] != '.';
             if (pPointer >= P.Length)
-                return sPointer >= S.Length;
-            if (pPointer == P.Length - 1)
-                return (P[pPointer] == '.' || S[sPointer] == P[pPointer]) && IsMatchHelper(sPointer + 1, pPointer + 1);
-            if (P[pPointer + 1] != '*')
+                return sPointer == S.Length;
+            if (sPointer > S.Length)
+                return false;
+            if (pPointer < P.Length - 1 && P[pPointer + 1] == '*')
             {
-                return (P[pPointer] == '.' || S[sPointer] == P[pPointer]) && IsMatchHelper(sPointer + 1, pPointer + 1);
+                while (sPointer < S.Length && (P[pPointer] == '.' || S[sPointer] == P[pPointer]))
+                {
+                    if (IsMatchHelper(sPointer, pPointer + 2))
+                        return true;
+                    sPointer++;
+                }
+                return IsMatchHelper(sPointer, pPointer + 2);
             }
-            while (sPointer < S.Length && (P[pPointer] == '.' || S[sPointer] == P[pPointer]))
-            {
-                if (IsMatchHelper(sPointer, pPointer + 2))
-                    return true;
-                sPointer++;
-            }
-            return IsMatchHelper(sPointer, pPointer + 2);
+            return ((pPointer < P.Length && P[pPointer] == '.') || (sPointer < S.Length && S[sPointer] == P[pPointer])) && IsMatchHelper(sPointer + 1, pPointer + 1);
         }
 
 
