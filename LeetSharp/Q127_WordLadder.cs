@@ -33,7 +33,87 @@ namespace LeetSharp
     {
         public int LadderLength(string start, string end, string[] dict)
         {
-            return -1;
+            //dict = dict.GroupBy(i => i).Select(i => i.FirstOrDefault()).ToArray(); //remove duplicated words, appearred in large testing data. 
+            HashSet<string> unvisited = new HashSet<string>(dict);
+            //HashSet<string> visited = new HashSet<string>();
+            Dictionary<string, List<string>> graph;
+            var shortest = new Dictionary<string, int>();
+            foreach (var s in dict)
+            {
+                if (!shortest.ContainsKey(s))
+                    shortest.Add(s, 0);
+            }
+            //Dictionary<string, string> route = dict.ToDictionary(key => key, _ => string.Empty);
+            if (!ConvertToGraph(shortest.Keys.ToArray(), out graph))
+                return -1;
+            Queue<string> q = new Queue<string>();
+            q.Enqueue(start);
+            //visited.Add(start);
+            unvisited.Remove(start);
+            while (q.Count() != 0)
+            {
+                var vertex = q.Dequeue();
+                foreach (var adj in graph[vertex])
+                {
+                    if (unvisited.Contains(adj))
+                    {
+                        q.Enqueue(adj);
+                        shortest[adj] = shortest[vertex] + 1;
+                        //route[adj] = vertex;
+                        unvisited.Remove(adj);
+                        //visited.Add(adj);
+                    }
+                }
+            }
+            return shortest[end] > 0 ? shortest[end] + 1 : 0;
+            //if (shortest[end] > 0)
+            //{
+            //    var node = end;
+            //    Console.Write("Route:       ");
+            //    while (node != start)
+            //    {
+            //        Console.Write("{0} <= ", node);
+            //        node = route[node];
+            //    }
+            //    Console.Write(start);
+            //    return shortest[end] + 1; //include the starting point itself, or we could increase each layer by 1
+            //}
+            //else
+            //    return 0;
+        }
+
+        /// <summary>
+        /// the graph is actually a Dict<string, List<string>> where the key is the vertex, and value (string list) is the adjacent vertices
+        /// </summary>
+        /// <param name="dict"></param>
+        /// <param name="graph"></param>
+        /// <returns></returns>
+        private bool ConvertToGraph(string[] dict, out Dictionary<string, List<string>> graph)
+        {
+            graph = new Dictionary<string, List<string>>();
+            try
+            {
+                foreach (var s in dict)
+                {
+                    graph.Add(s, new List<string>());
+                }
+                for (int i = 0; i < dict.Length; i++)
+                    for (int j = i + 1; j < dict.Length; j++)
+                    {
+                        if (dict[i].Length == dict[j].Length &&
+                             Enumerable.Range(0, dict[i].Length).Where(idx => dict[i][idx] != dict[j][idx]).Count() == 1)
+                        {
+                            graph[dict[i]].Add(dict[j]);
+                            graph[dict[j]].Add(dict[i]);
+                        }
+                    }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.Write("Undexpected Error caught: {0}!", ex.Message);
+                return false;
+            }
         }
 
         public string SolveQuestion(string input)
