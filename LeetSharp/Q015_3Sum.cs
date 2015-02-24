@@ -27,6 +27,7 @@ namespace LeetSharp
             if (num.Length < 3)
                 return new int[0][];
             List<int[]> result = new List<int[]>();
+            HashSet<string> resultSet = new HashSet<string>();
             QSort(ref num, 0, num.Length - 1);
             for (int i = 0; i < num.Length - 2; i++)
             {
@@ -38,8 +39,12 @@ namespace LeetSharp
                     var sum = arr.Sum();
                     if (sum == 0)
                     {
-                        if (!result.Any(elem => elem[0] == arr[0] && elem[1] == arr[1] && elem[2] == arr[2])) 
+                        string currentResult = string.Format("{0},{1},{2}", arr[0], arr[1], arr[2]);
+                        if (resultSet.Add(currentResult))
+                        {
                             result.Add(arr);
+                        }
+                            
                         while (left <= right && num[right] == arr[2])
                             right--;
                         while (left <= right && num[left] == arr[1])
