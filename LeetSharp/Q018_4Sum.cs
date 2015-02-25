@@ -26,23 +26,41 @@ namespace LeetSharp
         public int[][] FourSum(int[] num, int target)
         {
             List<int[]> result = new List<int[]>();
+            HashSet<string> hset = new HashSet<string>();
             var cache = new Dictionary<int, List<int[]>>();
+            if (num.Length <= 3)
+                return result.ToArray();
             num = num.OrderBy(i => i).ToArray();
             for (int i = 0; i < num.Length - 1; i++)
                 for (int j = i + 1; j < num.Length; j++)
                 {
                     int sum = num[i] + num[j];
-                    if (cache.ContainsKey(sum))
+                    if (!cache.ContainsKey(sum))
                     {
                         cache.Add(sum, new List<int[]>());
                     }
-                    cache[sum].Add(new[] { });
+                    cache[sum].Add(new [] { i, j });
+                }
+            for (int i = 0; i < num.Length - 1; i++)
+                for (int j = i + 1; j < num.Length; j++)
+                {
+                    var key = target - num[i] - num[j];
+                    if (!cache.ContainsKey(key))
+                        continue;
+                    for (int k = 0; k < cache[key].Count; k++)
+                    {
+                        var vec = cache[key][k];
+                        if (j >= vec[0])
+                            continue; //make sure i, j < vec[0], vec[1]
+                        var idx = string.Format("{0},{1},{2},{3}", num[i], num[j], num[vec[0]], num[vec[1]]);
+                        if (!hset.Contains(idx))
+                            hset.Add(idx);
+                        else
+                            continue; //remove duplicated element set. 
+                        result.Add(new int[] { num[i], num[j], num[vec[0]], num[vec[1]] });
+                    }
                 }
             return result.ToArray();
-        }
-        public void QSort(ref int[] num, int left, int right)
-        {
-            
         }
 
         public string SolveQuestion(string input)
