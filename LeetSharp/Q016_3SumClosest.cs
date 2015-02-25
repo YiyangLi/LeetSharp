@@ -19,7 +19,64 @@ namespace LeetSharp
     {
         public int ThreeSumClosest(int[] num, int target)
         {
-            return -1;
+            if (num.Length < 3)
+                return target;
+            int distance = Int32.MaxValue;
+            int result = 0;
+            QSort(ref num, 0, num.Length - 1);
+            for (int i = 0; i < num.Length - 2; i++)
+            {
+                int left = i + 1;
+                int right = num.Length - 1;
+                while (left < right)
+                {
+                    int sum = num[i] + num[left] + num[right];
+                    int cDistance = Math.Abs(sum - target);
+                    if (cDistance < distance)
+                    {
+                        distance = cDistance;
+                        result = sum;
+                    }
+                    if (sum > target)
+                        right--;
+                    if (sum < target)
+                        left++;
+                    if (sum == target)
+                    {
+                        i = num.Length;
+                        break;
+                    }
+                }
+            }
+            return result;
+        }
+        public void QSort(ref int[] num, int left, int right)
+        {
+            if (left >= right)
+                return;
+            int pivot = num[left];
+            int i = left + 1;
+            int j = i;
+            while (j <= right)
+            {
+                if (num[j] < pivot)
+                {
+                    Swap(ref num, i, j);
+                    i++;
+                }
+                j++;
+            }
+            i = i - 1;
+            Swap(ref num, i, left);
+            QSort(ref num, left, i - 1);
+            QSort(ref num, i + 1, right);
+        }
+
+        public void Swap(ref int[] number, int x, int y)
+        {
+            int temp = number[x];
+            number[x] = number[y];
+            number[y] = temp;
         }
 
         public string SolveQuestion(string input)

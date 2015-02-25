@@ -25,7 +25,24 @@ namespace LeetSharp
     {
         public int[][] FourSum(int[] num, int target)
         {
-            return null;
+            List<int[]> result = new List<int[]>();
+            var cache = new Dictionary<int, List<int[]>>();
+            num = num.OrderBy(i => i).ToArray();
+            for (int i = 0; i < num.Length - 1; i++)
+                for (int j = i + 1; j < num.Length; j++)
+                {
+                    int sum = num[i] + num[j];
+                    if (cache.ContainsKey(sum))
+                    {
+                        cache.Add(sum, new List<int[]>());
+                    }
+                    cache[sum].Add(new[] { });
+                }
+            return result.ToArray();
+        }
+        public void QSort(ref int[] num, int left, int right)
+        {
+            
         }
 
         public string SolveQuestion(string input)
