@@ -16,7 +16,29 @@ namespace LeetSharp
     {
         public bool IsValid(string s)
         {
-            return false;
+            Stack<char> stack = new Stack<char>();
+            var right = ")]}".Select((c, i) => new { Key = c, Value = i }).ToDictionary(i => i.Key, i => i.Value);
+            var left = "([{";
+            var c2 = ' ';
+            foreach (var c in s)
+            {
+                switch (c)
+                {
+                    case '(':
+                    case '[':
+                    case '{':
+                        stack.Push(c);
+                        break;
+                    case ')':
+                    case ']':
+                    case '}':
+                        if (stack.Count() == 0 || stack.Peek() != left[right[c]])
+                            return false;
+                        stack.Pop();
+                        break;
+                }
+            }
+            return stack.Count() == 0;
         }
 
         public string SolveQuestion(string input)
