@@ -16,9 +16,37 @@ namespace LeetSharp
     [TestClass]
     public class Q022_GenerateParentheses
     {
+        private List<string> result;
         public string[] GenerateParenthesis(int n)
         {
-            return null;
+            result = new List<string>();
+            Stack<string> str = new Stack<string>();
+            Stack<int> left = new Stack<int>();
+            Stack<int> right = new Stack<int>();
+            str.Push(string.Empty);
+            left.Push(0);
+            right.Push(0);
+            while (str.Count() != 0 && left.Count() != 0 && right.Count() != 0)
+            {
+                var s = str.Pop();
+                var l = left.Pop();
+                var r = right.Pop();
+                if (l == n)
+                {
+                    result.Add(s + string.Concat(Enumerable.Repeat(')', n - r)));
+                    continue;
+                }
+                str.Push(s + '(');
+                left.Push(l + 1);
+                right.Push(r);
+                if (l > r)
+                {
+                    str.Push(s + ')');
+                    left.Push(l);
+                    right.Push(r + 1);
+                }
+            }
+            return result.OrderBy(i => i).ToArray(); ;
         }
 
         public string SolveQuestion(string input)
