@@ -18,7 +18,33 @@ namespace LeetSharp
     {
         public int[][] Merge(int[][] intervals)
         {
-            return null;
+            Stack<int[]> result = new Stack<int[]>();
+            if (intervals.Length == 0)
+                return result.ToArray();
+            intervals = intervals.OrderBy(i => i[0]).ToArray();
+            result.Push(intervals[0]);
+            for (int i = 1; i < intervals.Length; i++)
+            {
+                var current = result.Pop();
+                if (current[1] >= intervals[i][0])
+                {
+                    if (current[1] >= intervals[i][1])
+                        result.Push(current);
+                    else
+                        result.Push(new[] { current[0], intervals[i][1] });
+                }
+                else
+                {
+                    result.Push(current);
+                    result.Push(intervals[i]);
+                }
+            }
+            Stack<int[]> result2 = new Stack<int[]>();
+            while (result.Count > 0)
+            {
+                result2.Push(result.Pop());
+            }
+            return result2.ToArray();
         }
 
         public string SolveQuestion(string input)
