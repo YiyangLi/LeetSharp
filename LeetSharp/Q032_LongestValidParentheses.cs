@@ -19,7 +19,28 @@ namespace LeetSharp
     {
         public int LongestValidParentheses(string s)
         {
-            return -1;
+            int right = -1;
+            int result = 0;
+            Stack<int> left = new Stack<int>();
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (s[i] == '(')
+                    left.Push(i);
+                else
+                {
+                    if (left.Count == 0)
+                        right = i;
+                    else
+                    {
+                        left.Pop();
+                        if (left.Count() == 0)
+                            result = Math.Max(result, i - right);
+                        else
+                            result = Math.Max(result, i - left.Peek());
+                    }
+                }   
+            }
+            return result;
         }
 
         public string SolveQuestion(string input)
