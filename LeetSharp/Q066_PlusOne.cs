@@ -14,7 +14,21 @@ namespace LeetSharp
     {
         public int[] PlusOne(int[] digits)
         {
-            return null;
+            int idx = digits.Length - 1;
+            int carry = 1;
+            while (idx >= 0 && carry > 0)
+            {
+                digits[idx] = digits[idx] + carry;
+                carry = digits[idx] / 10;
+                int remainder = digits[idx] % 10;
+                digits[idx] = remainder;
+                idx--;
+            }
+            if (carry > 0)
+            {
+                digits = new[] { carry }.Concat(digits).ToArray();
+            }
+            return digits;
         }
 
         public string SolveQuestion(string input)
