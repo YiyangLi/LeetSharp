@@ -16,7 +16,81 @@ namespace LeetSharp
     {
         int RomanToInt(string s)
         {
-            return -1;
+            int num = 0;
+            int i = 0;
+            while (i < s.Length)
+            {
+                var p = match4Or9(s, i);
+                if (p > 0)
+                {
+                    num = num + p;
+                    i = i + 1;
+                }
+                else
+                    num = num + matchOthers(s, i);
+                i++;
+            }
+            return num;
+        }
+        int match4Or9(string s, int i)
+        {
+            int num = 0;
+            if (i == s.Length - 1)
+                num = 0;
+            else
+            {
+                if (s[i] == 'I')
+                {
+                    if (s[i + 1] == 'V')
+                        num = 4;
+                    else if (s[i + 1] == 'X')
+                        num = 9;
+                }
+                if (s[i] == 'X')
+                {
+                    if (s[i + 1] == 'L')
+                        num = 40;
+                    else if (s[i + 1] == 'C')
+                        num = 90;
+                }
+                if (s[i] == 'C')
+                {
+                    if (s[i + 1] == 'D')
+                        num = 400;
+                    else if (s[i + 1] == 'M')
+                        num = 900;
+                }
+            }
+            return num;
+        }
+        int matchOthers(string s, int i)
+        {
+            int num = 0;
+            switch (s[i])
+            {
+                case 'I':
+                    num = 1;
+                    break;
+                case 'V':
+                    num = 5;
+                    break;
+                case 'X':
+                    num = 10;
+                    break;
+                case 'L':
+                    num = 50;
+                    break;
+                case 'C':
+                    num = 100;
+                    break;
+                case 'D':
+                    num = 500;
+                    break;
+                case 'M':
+                    num = 1000;
+                    break;
+            }
+            return num;
         }
 
         public string SolveQuestion(string input)
