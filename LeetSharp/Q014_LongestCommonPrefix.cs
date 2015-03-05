@@ -14,7 +14,18 @@ namespace LeetSharp
     {
         public string LongestCommonPrefix(string[] strs)
         {
-            return null;
+            if (strs.Length == 0)
+                return string.Empty;
+            List<char> result = new List<char>();
+            for (int i = 0; i < strs[0].Length; i++)
+            {
+                var c = strs[0][i];
+                if (strs.All(s => i < s.Length && c == s[i]))
+                    result.Add(c);
+                else
+                    break;
+            }
+            return new string(result.ToArray());
         }
 
         public string SolveQuestion(string input)
