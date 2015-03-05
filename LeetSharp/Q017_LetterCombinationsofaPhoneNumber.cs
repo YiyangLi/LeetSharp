@@ -17,9 +17,18 @@ namespace LeetSharp
     [TestClass]
     public class Q017_LetterCombinationsofaPhoneNumber
     {
+        
         public string[] LetterCombinations(string digits)
         {
-            return null;
+            string[] mapping = new string[] { string.Empty, string.Empty, "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz" };
+            var result = new string[] {string.Empty};
+            foreach (char c in digits)
+            {
+                result = (from ch in mapping[(int)(c - '0')]
+                          from str in result
+                          select string.Format("{0}{1}", str, ch)).ToArray();
+            }
+            return result.OrderBy(s => s).ToArray(); //in order to match the testing data set, totally unnecessary. 
         }
 
         public string SolveQuestion(string input)
