@@ -21,7 +21,29 @@ namespace LeetSharp
     {
         public ListNode<int> RemoveNthFromEnd(ListNode<int> head, int n)
         {
-            return null;
+            if (head == null)
+                return head;
+            var dummy = new ListNode<int>(-1);
+            dummy.Next = head;
+            int length = 1;
+            int step = -1;
+            while (head != null && head.Next != null)
+            {
+                head = head.Next;
+                length++;
+            }
+            if (length == n)
+                return dummy.Next.Next;
+            step = length - n;
+            head = dummy;
+            while (step > 0)
+            {
+                head = head.Next;
+                step--;
+            }
+            var next = head.Next;
+            head.Next = next.Next;
+            return dummy.Next;
         }
 
         public string SolveQuestion(string input)
