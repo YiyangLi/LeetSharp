@@ -14,7 +14,35 @@ namespace LeetSharp
     {
         public int Divide(int dividend, int divisor)
         {
-            return -1;
+
+            const long ZERO = 0;
+            long result = 0;
+            short shift = 0;
+            bool neg = false;
+            long div2 = dividend, divisor2 = divisor;
+            if (dividend < ZERO)
+            {
+                neg = !neg;
+                div2 = ZERO - div2;
+            }
+            if (divisor < ZERO)
+            {
+                neg = !neg;
+                divisor2 = ZERO - divisor2;
+            }
+            while (divisor2 << shift < div2)
+                shift++;
+            while (shift >= 0)
+            {
+                if (divisor2 << shift <= div2)
+                {
+                    result |= 1 << shift;
+                    div2 -= divisor2 << shift;
+                }
+                shift--;
+            }
+            result = neg ? 0 - result : result;
+            return (int)result;
         }
 
         public string SolveQuestion(string input)
