@@ -15,7 +15,32 @@ namespace LeetSharp
     {
         public ListNode<int> MergeTwoLists(ListNode<int> l1, ListNode<int> l2)
         {
-            return null;
+            if (l1 == null)
+            {
+                return l2;
+            }
+            if (l2 == null)
+            {
+                return l1;
+            }
+            var dummy = new ListNode<int>(-1);
+            var head = dummy;
+            while (l1 != null && l2 != null)
+            {
+                if (l1.Val < l2.Val)
+                {
+                    head.Next = l1;
+                    l1 = l1.Next;
+                }
+                else
+                {
+                    head.Next = l2;
+                    l2 = l2.Next;
+                }
+                head = head.Next;
+            }
+            head.Next = l1 ?? l2;
+            return dummy.Next;
         }
 
         public string SolveQuestion(string input)
