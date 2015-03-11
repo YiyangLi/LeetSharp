@@ -19,21 +19,24 @@ namespace LeetSharp
     {
         public ListNode<int> SwapPairs(ListNode<int> head)
         {
-            if (head == null) 
+            if (head == null || head.Next == null) 
                 return head;
             var dummy = new ListNode<int>(-1);
-            dummy.Next = head;
             var prev = dummy;
-            var current = dummy.Next;
-            var next = dummy.Next.Next;
-            while (next != null)
+            var n1 = head;
+            var n2 = n1.Next;
+            var next = n2.Next;
+            while (true)
             {
-                prev.Next = next;
-                current.Next = next.Next;
-                next.Next = current;
-                prev = current;
-                current = current.Next;
-                next = current != null ? current.Next : null;
+                prev.Next = n2;
+                n2.Next = n1;
+                n1.Next = next;
+                if (next == null || next.Next == null)
+                    break;
+                prev = n1;
+                n1 = next;
+                n2 = n1.Next;
+                next = n2.Next;
             }
             return dummy.Next;
         }
